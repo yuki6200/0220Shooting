@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Security.Authentication.ExtendedProtection;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -9,21 +9,34 @@ public class Player : MonoBehaviour
 
     public float power = 0f;
 
+    public float life = 3f;
+    public bool isHit = false;
+    public static string gameState;
+    //Rigidbody2D rBody;
+
     public bool isTouchTop = false;
     public bool isTouchBottom = false;
-    public bool isTouchLeft = false;
     public bool isTouchRight = false;
+    public bool isTouchLeft = false;
 
     Animator anim;
 
     public GameObject bulletPrefabA;
     public GameObject bulletPrefabB;
+
     public float curBulletDelay = 0f;
-    public float maxBulletDelay = 0.3f;
+    public float maxBulletDelay = 1f;
+
+    public GameObject gameMgrObj;
+
+    public GameObject[] bulletClone;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
+
+        gameState = "Playing";
+
     }
 
     // Update is called once per frame
@@ -32,6 +45,26 @@ public class Player : MonoBehaviour
         Move();
         Fire();
         ReloadBullet();
+    }
+
+    private void FixedUpdate()
+    {
+        if (gameState != "Playing")
+            return;
+
+        if (isHit)
+        {
+            float val = Mathf.Sin(Time.time * 50);
+            if (val > 0)
+            {
+                gameObject.GetComponent<SpriteRenderer>().enabled = true;
+            }
+            else
+            {
+                gameObject.GetComponent<SpriteRenderer>().enabled = false;
+            }
+            return;
+        }        
     }
 
     void Move()
@@ -65,7 +98,7 @@ public class Player : MonoBehaviour
             return;
 
         Power();
-        
+
         curBulletDelay = 0;
     }
 
@@ -76,12 +109,11 @@ public class Player : MonoBehaviour
 
     void Power()
     {
-        switch(power)
+        switch (power)
         {
             case 1:
                 {
-                    GameObject bullet = Instantiate(bulletPrefabA,
-                        transform.position, Quaternion.identity);
+                    GameObject bullet = Instantiate(bulletPrefabA, transform.position, Quaternion.identity);
                     Rigidbody2D rd = bullet.GetComponent<Rigidbody2D>();
                     rd.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 }
@@ -89,12 +121,14 @@ public class Player : MonoBehaviour
             case 2:
                 {
                     GameObject bulletR = Instantiate(bulletPrefabA,
-                        transform.position + Vector3.right * 0.1f, Quaternion.identity);
+                        transform.position + Vector3.right * 0.1f,
+                        Quaternion.identity);
                     Rigidbody2D rdR = bulletR.GetComponent<Rigidbody2D>();
                     rdR.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
 
                     GameObject bulletL = Instantiate(bulletPrefabA,
-                        transform.position + Vector3.left * 0.1f, Quaternion.identity);
+                        transform.position + Vector3.left * 0.1f,
+                        Quaternion.identity);
                     Rigidbody2D rdL = bulletL.GetComponent<Rigidbody2D>();
                     rdL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 }
@@ -102,48 +136,26 @@ public class Player : MonoBehaviour
             case 3:
                 {
                     GameObject bulletR = Instantiate(bulletPrefabA,
-                        transform.position + Vector3.right * 0.25f, Quaternion.identity);
+                        transform.position + Vector3.right * 0.25f,
+                        Quaternion.identity);
                     Rigidbody2D rdR = bulletR.GetComponent<Rigidbody2D>();
                     rdR.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
 
-                    GameObject bulletL = Instantiate(bulletPrefabA,
-                        transform.position + Vector3.left * 0.25f, Quaternion.identity);
-                    Rigidbody2D rdL = bulletL.GetComponent<Rigidbody2D>();
-                    rdL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
-
                     GameObject bulletC = Instantiate(bulletPrefabB,
-                        transform.position, Quaternion.identity);
+                        transform.position,
+                        Quaternion.identity);
                     Rigidbody2D rdC = bulletC.GetComponent<Rigidbody2D>();
                     rdC.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
+
+                    GameObject bulletL = Instantiate(bulletPrefabA,
+                        transform.position + Vector3.left * 0.25f,
+                        Quaternion.identity);
+                    Rigidbody2D rdL = bulletL.GetComponent<Rigidbody2D>();
+                    rdL.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
                 }
                 break;
-
         }
-    }
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "PlayerBorder")
-        {
-            if (collision.gameObject.tag == "PlayerBorder")
-            {
-                switch (collision.gameObject.name)
-                {
-                    case "Top":
-                        isTouchTop = false;
-                        break;
-                    case "Bottom":
-                        isTouchBottom = false;
-                        break;
-                    case "Right":
-                        isTouchRight = false;
-                        break;
-                    case "Left":
-                        isTouchLeft = false;
-                        break;
-                }
-            }
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -166,5 +178,64 @@ public class Player : MonoBehaviour
                     break;
             }
         }
-    }    
+        if (collision.gameObject.tag == "EnemyBullet")
+        {
+            if (isHit)
+                return;
+
+            isHit = true;
+            life--;
+
+            if (life == 0)
+            {
+                GameManager.gameManager.GameOver();
+            }
+            else
+            {
+                Invoke("EffectPlayer", 0.5f);                
+            }
+            
+        }
+    }
+
+    void EffectPlayer()
+    {
+        isHit = false;
+        gameObject.SetActive(false);
+
+        bulletClone = GameObject.FindGameObjectsWithTag("EnemyBullet");
+        
+        if (bulletClone != null )
+        {
+            for (int i = 0; i < bulletClone.Length; i++)
+            {
+                Destroy(bulletClone[i]);
+            }
+        }        
+
+        GameManager.gameManager.RespawnPlayer();
+               
+    }
+    
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "PlayerBorder")
+        {
+            switch (collision.gameObject.name)
+            {
+                case "Top":
+                    isTouchTop = false;
+                    break;
+                case "Bottom":
+                    isTouchBottom = false;
+                    break;
+                case "Right":
+                    isTouchRight = false;
+                    break;
+                case "Left":
+                    isTouchLeft = false;
+                    break;
+            }
+        }
+    }
 }

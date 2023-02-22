@@ -29,6 +29,8 @@ public class Player : MonoBehaviour
 
     public GameObject gameMgrObj;
 
+    public GameManager manager;
+
     public GameObject[] bulletClone;
 
     private void Start()
@@ -178,22 +180,10 @@ public class Player : MonoBehaviour
                     break;
             }
         }
-        if (collision.gameObject.tag == "EnemyBullet")
+        if (collision.gameObject.tag == "EnemyBullet" || collision.gameObject.tag == "Enemy")
         {
-            if (isHit)
-                return;
-
-            isHit = true;
-            life--;
-
-            if (life == 0)
-            {
-                GameManager.gameManager.GameOver();
-            }
-            else
-            {
-                Invoke("EffectPlayer", 0.5f);                
-            }
+            manager.RespawnPlayer
+            gameObject.SetActive(false);
             
         }
     }

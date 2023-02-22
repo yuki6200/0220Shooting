@@ -56,18 +56,18 @@ public class GameManager : MonoBehaviour
         enemyLogic.playerObject = player;
         enemyLogic.Move(ranPoint);
     }
+
     public void GameOver()
     {
 
     }
     public void RespawnPlayer()
     {
-        Invoke("AlivePlayer", 1.0f);
+        Invoke("RespawnPlayerExe", 2f);        
     }
-    void AlivePlayer()
+    void RespawnPlayerExe()
     {
-        player.SetActive(true);
         player.transform.position = Vector3.down * 4.2f;
-        
+        player.SetActive(true);
     }
 }

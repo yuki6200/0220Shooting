@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 744667443728951506}
   m_Layer: 0
   m_Name: Enemy A
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  health: 5
+  health: 3
   sprites:
   - {fileID: 8414478535512612329, guid: 138040323294fd440a3a823e5d70ad01, type: 3}
   - {fileID: 4326287474489854147, guid: 138040323294fd440a3a823e5d70ad01, type: 3}
@@ -108,6 +108,14 @@ MonoBehaviour:
   curBulletDelay: 0
   maxBulletDelay: 1
   playerObject: {fileID: 0}
+  enemyScore: 10
+  ranItem: 0
+  itemprefabs:
+  - {fileID: 542269522806555455, guid: f9c8652c1a2c4af4d95ee0493500ac2c, type: 3}
+  - {fileID: 1546302968088666879, guid: 0f0a2d848bddd6c4d825a3dc2ad36c4f, type: 3}
+  - {fileID: 4831190424062219693, guid: 84037b553d6e02646850868b4f02b45d, type: 3}
+  curItemDelay: 0
+  nextItemDelay: 0
 --- !u!50 &8330633147967659371
 Rigidbody2D:
   serializedVersion: 4

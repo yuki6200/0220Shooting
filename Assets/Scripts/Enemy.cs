@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -20,6 +21,18 @@ public class Enemy : MonoBehaviour
 
     public GameObject playerObject;
 
+    public static int getScore = 0;
+
+    public int enemyScore;
+
+    bool isDead = false;
+
+    public int ranItem;
+    public GameObject[] itemprefabs;
+
+    public float curItemDelay;
+    public float nextItemDelay;
+
     private void Awake()
     {
         rd = GetComponent<Rigidbody2D>();
@@ -38,6 +51,7 @@ public class Enemy : MonoBehaviour
     {
         Fire();
         ReloadBullet();
+        curItemDelay += Time.deltaTime;
     }
 
     void Fire()
@@ -96,16 +110,37 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void OnHit(float BulletPower)
+    public void OnHit(float BulletPower)
     {
         health -= BulletPower;
         spriteRender.sprite = sprites[1];
         Invoke("ReturnSprite", 0.1f);
 
-        if (health <= 0)
+        if (health <= 0 && isDead == false) //isDead 조건을 더 걸어서 죽을때만 점수 체크되도록
         {
+            isDead = true;
             Destroy(gameObject);
+            if (Player.playerScore != 0)
+            {
+                getScore += Player.playerScore;
+            }
+            getScore += enemyScore;
+            GameManager.gameManager.GetScore();
+
+            if (curItemDelay > nextItemDelay)
+            {
+                GetItem();
+
+                nextItemDelay = Random.Range(2.0f, 3.0f);
+                curItemDelay = 0;
+            }                        
         }
+    }
+
+    void GetItem()
+    {
+        ranItem = Random.Range(0, 3);
+        GameObject getItem = Instantiate(itemprefabs[ranItem], gameObject.transform.position, Quaternion.identity);
     }
 
     void ReturnSprite()

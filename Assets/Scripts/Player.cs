@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     public float power = 0f;
 
     public float life = 3f;
+    public int score;
+
     public bool isHit = false;
     public static string gameState;
     //Rigidbody2D rBody;
@@ -29,11 +31,15 @@ public class Player : MonoBehaviour
 
     public GameObject gameMgrObj;
 
-    public GameObject[] bulletClone;
+    public static int playerScore;
+    public GameObject boomEffect;
+
+    PolygonCollider2D polygon;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
+        polygon = GetComponent<PolygonCollider2D>();
 
         gameState = "Playing";
 
@@ -178,6 +184,7 @@ public class Player : MonoBehaviour
                     break;
             }
         }
+
         if (collision.gameObject.tag == "EnemyBullet")
         {
             if (isHit)
@@ -192,31 +199,78 @@ public class Player : MonoBehaviour
             }
             else
             {
+                GameManager.gameManager.RespawnPlayer();
                 Invoke("EffectPlayer", 0.5f);                
-            }
-            
+            }            
         }
+
+        if (collision.gameObject.tag == "Item")
+        {
+            Item item = collision.gameObject.GetComponent<Item>();
+            switch(item.type)
+            {
+                case ItemType.Coin:
+                    playerScore += 100;
+                    break;
+                case ItemType.Power:
+                    power++;
+                    if (power >= 3)
+                        power = 3;
+                    break;
+                case ItemType.Boom:
+                    {
+                        boomEffect.SetActive(true);
+                        Invoke("OffBoomEffect", 3.0f);
+
+                        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+                        for (int i = 0; i < enemies.Length; i++)
+                        {
+                            Enemy enemyLogic = enemies[i].GetComponent<Enemy>();
+                            enemyLogic.OnHit(1000);
+                            Destroy(enemies[i]);
+                        }
+                        GameObject[] enemyBullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
+                        for (int i = 0; i<enemyBullets.Length; i++)
+                        {
+                            Destroy(enemyBullets[i]);
+                        }
+                    }
+                    break;
+            }
+            Destroy(collision.gameObject);
+        }
+    }
+
+    void OffBoomEffect()
+    {
+        boomEffect.SetActive(false);
     }
 
     void EffectPlayer()
     {
-        isHit = false;
         gameObject.SetActive(false);
-
-        bulletClone = GameObject.FindGameObjectsWithTag("EnemyBullet");
-        
-        if (bulletClone != null )
-        {
-            for (int i = 0; i < bulletClone.Length; i++)
-            {
-                Destroy(bulletClone[i]);
-            }
-        }        
-
-        GameManager.gameManager.RespawnPlayer();
-               
+        Invoke("Appear", 1.0f);          
     }
-    
+
+    void Appear()
+    {
+        transform.position = Vector3.down * 4.2f;
+        gameObject.SetActive(true);
+        isHit = false;
+        Invoke("dontHit", 0f);
+    }
+
+    void dontHit()
+    {
+        polygon.isTrigger = true;
+        Invoke("againHit", 5f);
+    }
+
+    void againHit()
+    {
+        polygon.isTrigger = false;
+    }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "PlayerBorder")

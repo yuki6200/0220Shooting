@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8552497143144431492}
   m_Layer: 0
   m_Name: Enemy B
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  health: 15
+  health: 10
   sprites:
   - {fileID: -1147401495359466748, guid: 138040323294fd440a3a823e5d70ad01, type: 3}
   - {fileID: -7844560889915226194, guid: 138040323294fd440a3a823e5d70ad01, type: 3}
@@ -160,3 +160,11 @@ MonoBehaviour:
   curBulletDelay: 0
   maxBulletDelay: 1
   playerObject: {fileID: 0}
+  enemyScore: 50
+  ranItem: 0
+  itemprefabs:
+  - {fileID: 542269522806555455, guid: f9c8652c1a2c4af4d95ee0493500ac2c, type: 3}
+  - {fileID: 1546302968088666879, guid: 0f0a2d848bddd6c4d825a3dc2ad36c4f, type: 3}
+  - {fileID: 4831190424062219693, guid: 84037b553d6e02646850868b4f02b45d, type: 3}
+  curItemDelay: 0
+  nextItemDelay: 0

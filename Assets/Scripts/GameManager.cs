@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +14,13 @@ public class GameManager : MonoBehaviour
     public float nextEnemySpawnDelay;
 
     public GameObject player;
+
+    public Image[] lifeicon;
+    public GameObject overSet;
+
+    int i = 0;
+
+    public Text txtScore;
 
     private void Awake()    //ΩÃ±€≈Ê¿∏∑Œ ∏∏µÈ±‚
     {
@@ -30,7 +38,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        txtScore.text = "0";
     }
    
     // Update is called once per frame
@@ -43,7 +51,13 @@ public class GameManager : MonoBehaviour
 
             nextEnemySpawnDelay = Random.Range(0.5f, 3.0f);
             curEnemySpawnDelay = 0;
-        }
+        }      
+        
+    }
+
+    public void GetScore()
+    {
+        txtScore.text = Enemy.getScore.ToString();
     }
 
     void SpawnEnemy()
@@ -58,16 +72,27 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
-
+        lifeicon[lifeicon.Length-lifeicon.Length].enabled = false;
+        Invoke("OverSet", 0.5f);        
+    }
+    void OverSet()
+    {
+        overSet.gameObject.SetActive(true);
+        Time.timeScale = 0;
     }
     public void RespawnPlayer()
     {
-        Invoke("AlivePlayer", 1.0f);
+        i++;
+        lifeicon[lifeicon.Length - i].enabled = false;        
+        Invoke("AlivePlayer", 0.5f);
     }
     void AlivePlayer()
     {
-        player.SetActive(true);
-        player.transform.position = Vector3.down * 4.2f;
-        
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
+        for (int i = 0; i < bullets.Length; i++)
+        {
+            Destroy(bullets[i]);
+        }
     }
+
 }

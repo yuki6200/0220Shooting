@@ -184,7 +184,6 @@ public class Player : MonoBehaviour
                     break;
             }
         }
-
         if (collision.gameObject.tag == "EnemyBullet")
         {
             if (isHit)
@@ -199,45 +198,9 @@ public class Player : MonoBehaviour
             }
             else
             {
-                GameManager.gameManager.RespawnPlayer();
                 Invoke("EffectPlayer", 0.5f);                
-            }            
-        }
-
-        if (collision.gameObject.tag == "Item")
-        {
-            Item item = collision.gameObject.GetComponent<Item>();
-            switch(item.type)
-            {
-                case ItemType.Coin:
-                    playerScore += 100;
-                    break;
-                case ItemType.Power:
-                    power++;
-                    if (power >= 3)
-                        power = 3;
-                    break;
-                case ItemType.Boom:
-                    {
-                        boomEffect.SetActive(true);
-                        Invoke("OffBoomEffect", 3.0f);
-
-                        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-                        for (int i = 0; i < enemies.Length; i++)
-                        {
-                            Enemy enemyLogic = enemies[i].GetComponent<Enemy>();
-                            enemyLogic.OnHit(1000);
-                            Destroy(enemies[i]);
-                        }
-                        GameObject[] enemyBullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
-                        for (int i = 0; i<enemyBullets.Length; i++)
-                        {
-                            Destroy(enemyBullets[i]);
-                        }
-                    }
-                    break;
             }
-            Destroy(collision.gameObject);
+            
         }
     }
 

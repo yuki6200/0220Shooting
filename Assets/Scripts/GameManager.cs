@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
         enemyLogic.playerObject = player;
         enemyLogic.Move(ranPoint);
     }
+
     public void GameOver()
     {
         lifeicon[lifeicon.Length-lifeicon.Length].enabled = false;
@@ -82,17 +83,12 @@ public class GameManager : MonoBehaviour
     }
     public void RespawnPlayer()
     {
-        i++;
-        lifeicon[lifeicon.Length - i].enabled = false;        
-        Invoke("AlivePlayer", 0.5f);
+        Invoke("AlivePlayer", 1.0f);
     }
-    void AlivePlayer()
+    void RespawnPlayerExe()
     {
-        GameObject[] bullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
-        for (int i = 0; i < bullets.Length; i++)
-        {
-            Destroy(bullets[i]);
-        }
+        player.SetActive(true);
+        player.transform.position = Vector3.down * 4.2f;
+        
     }
-
 }

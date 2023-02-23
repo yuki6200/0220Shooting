@@ -1771,7 +1771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  power: 1
+  power: 3
   life: 3
   score: 0
   isHit: 0
@@ -1783,7 +1783,7 @@ MonoBehaviour:
   bulletPrefabB: {fileID: 5474681257600556197, guid: 00905106b44bb6d49a069144544f600e, type: 3}
   curBulletDelay: 0
   maxBulletDelay: 0.3
-  gameMgrObj: {fileID: 0}
+  gameMgrObj: {fileID: 1939426598}
   boomEffect: {fileID: 1024840707}
 --- !u!95 &1726178455
 Animator:

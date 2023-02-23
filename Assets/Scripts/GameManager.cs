@@ -83,12 +83,17 @@ public class GameManager : MonoBehaviour
     }
     public void RespawnPlayer()
     {
+        i++;
+        lifeicon[lifeicon.Length - i].enabled = false;
         Invoke("AlivePlayer", 1.0f);
     }
-    void RespawnPlayerExe()
+
+    void AlivePlayer()
     {
-        player.SetActive(true);
-        player.transform.position = Vector3.down * 4.2f;
-        
-    }
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag("EnemyBullet");
+        for (int i = 0; i < bullets.Length; i++)
+        {
+            Destroy(bullets[i]);
+        }
+    }    
 }

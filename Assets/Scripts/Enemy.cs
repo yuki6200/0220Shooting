@@ -93,8 +93,8 @@ public class Enemy : MonoBehaviour
         {
             rd.velocity = Vector2.down * speed;
         }
-    }
-
+    }     
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Border")
@@ -131,7 +131,7 @@ public class Enemy : MonoBehaviour
             {
                 GetItem();
 
-                nextItemDelay = Random.Range(2.0f, 3.0f);
+                nextItemDelay = Random.Range(5.0f, 10.0f);
                 curItemDelay = 0;
             }                        
         }

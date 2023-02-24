@@ -65,6 +65,9 @@ public class Enemy : MonoBehaviour
 
     void Power()
     {
+        if (gameObject.name.Contains("Enemy B"))
+            return;
+
         GameObject bulletObj = Instantiate(enemyBulletPrefab,
             transform.position, Quaternion.identity);
         Rigidbody2D rdBullet = bulletObj.GetComponent<Rigidbody2D>();
@@ -120,10 +123,7 @@ public class Enemy : MonoBehaviour
         {
             isDead = true;
             Destroy(gameObject);
-            if (Player.playerScore != 0)
-            {
-                getScore += Player.playerScore;
-            }
+            
             getScore += enemyScore;
             GameManager.gameManager.GetScore();
 

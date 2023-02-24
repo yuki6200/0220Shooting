@@ -17,7 +17,7 @@ public class Item : MonoBehaviour
     private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
-        rigid.velocity = Vector2.down * 3;
+        rigid.velocity = Vector2.down * 2;
     }
     // Start is called before the first frame update
     void Start()

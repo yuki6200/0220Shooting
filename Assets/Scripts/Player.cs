@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using UnityEditor.U2D.Path;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -31,12 +33,16 @@ public class Player : MonoBehaviour
     public static int playerScore;
     public GameObject boomEffect;
 
-    PolygonCollider2D polygon;
+    SpriteRenderer spriteRenderer;
+    PolygonCollider2D poly;
+
+    public bool isRespawnTime;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
-        polygon = GetComponent<PolygonCollider2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        poly = GetComponent<PolygonCollider2D>();
 
         gameState = "Playing";
 
@@ -182,8 +188,11 @@ public class Player : MonoBehaviour
                     break;
             }
         }
-        if (collision.gameObject.tag == "EnemyBullet")
+        if (collision.gameObject.tag == "EnemyBullet" || collision.gameObject.tag == "Enemy")
         {
+            if (isRespawnTime)
+                return;
+
             if (isHit)
                 return;
 
@@ -193,12 +202,15 @@ public class Player : MonoBehaviour
             if (life == 0)
             {
                 GameManager.gameManager.GameOver();
+                gameObject.SetActive(false);
             }
             else
             {
                 GameManager.gameManager.RespawnPlayer();
-                Invoke("EffectPlayer", 0.5f);
+                gameObject.SetActive(false);
+                Invoke("Appear", 1.0f);
             }
+            
         }
 
         if (collision.gameObject.tag == "Item")
@@ -208,6 +220,7 @@ public class Player : MonoBehaviour
             {
                 case ItemType.Coin:
                     playerScore += 100;
+                    GameManager.gameManager.GetScore();
                     break;
                 case ItemType.Power:
                     power++;
@@ -243,18 +256,29 @@ public class Player : MonoBehaviour
         boomEffect.SetActive(false);
     }
 
-    void EffectPlayer()
-    {
-        gameObject.SetActive(false);
-        Invoke("Appear", 1.0f);
-    }
-
     void Appear()
     {
-        transform.position = Vector3.down * 4.2f;
+        PowerUp();
+        Invoke("PowerUp", 3f);
         gameObject.SetActive(true);
-        isHit = false;
-    }   
+        transform.position = Vector3.down * 4.2f;
+        isHit = false;        
+    }
+    
+    void PowerUp()
+    {
+        isRespawnTime = !isRespawnTime;
+        if (isRespawnTime)
+        {
+            spriteRenderer.color = new Color(1, 1, 1, 0.5f);
+            poly.isTrigger = true;
+        }
+        else
+        {
+            spriteRenderer.color = new Color(1,1,1,1);
+            poly.isTrigger = false;
+        }
+    }
 
     private void OnTriggerExit2D(Collider2D collision)
     {

@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
         {
             SpawnEnemy();
 
-            nextEnemySpawnDelay = Random.Range(0.5f, 3.0f);
+            nextEnemySpawnDelay = Random.Range(2.0f, 4.0f);
             curEnemySpawnDelay = 0;
         }      
         
@@ -57,6 +57,10 @@ public class GameManager : MonoBehaviour
 
     public void GetScore()
     {
+        if (Player.playerScore != 0)
+        {
+            Enemy.getScore += Player.playerScore;
+        }
         txtScore.text = Enemy.getScore.ToString();
     }
 

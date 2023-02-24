@@ -1688,9 +1688,9 @@ GameObject:
   - component: {fileID: 1726178457}
   - component: {fileID: 1726178456}
   - component: {fileID: 1726178455}
-  - component: {fileID: 1726178454}
   - component: {fileID: 1726178453}
   - component: {fileID: 1726178452}
+  - component: {fileID: 1726178458}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1758,33 +1758,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &1726178454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1726178451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18c2f127f39c0614198e57a36f3a92f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
-  power: 3
-  life: 3
-  score: 0
-  isHit: 0
-  isTouchTop: 0
-  isTouchBottom: 0
-  isTouchRight: 0
-  isTouchLeft: 0
-  bulletPrefabA: {fileID: 9172278752008612177, guid: 7c96d9478e1bc7e4fba8ae3a5e5371ba, type: 3}
-  bulletPrefabB: {fileID: 5474681257600556197, guid: 00905106b44bb6d49a069144544f600e, type: 3}
-  curBulletDelay: 0
-  maxBulletDelay: 0.3
-  gameMgrObj: {fileID: 1939426598}
-  boomEffect: {fileID: 1024840707}
 --- !u!95 &1726178455
 Animator:
   serializedVersion: 5
@@ -1872,6 +1845,33 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1726178458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726178451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18c2f127f39c0614198e57a36f3a92f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  power: 3
+  life: 3
+  score: 0
+  isHit: 0
+  isTouchTop: 0
+  isTouchBottom: 0
+  isTouchRight: 0
+  isTouchLeft: 0
+  bulletPrefabA: {fileID: 9172278752008612177, guid: 7c96d9478e1bc7e4fba8ae3a5e5371ba, type: 3}
+  bulletPrefabB: {fileID: 5474681257600556197, guid: 00905106b44bb6d49a069144544f600e, type: 3}
+  curBulletDelay: 0
+  maxBulletDelay: 0.3
+  gameMgrObj: {fileID: 0}
+  boomEffect: {fileID: 1024840707}
 --- !u!1 &1777063778
 GameObject:
   m_ObjectHideFlags: 0

@@ -28,8 +28,6 @@ public class Player : MonoBehaviour
     public float curBulletDelay = 0f;
     public float maxBulletDelay = 1f;
 
-    public GameObject gameMgrObj;
-
     public static int playerScore;
     public GameObject boomEffect;
 
@@ -236,8 +234,8 @@ public class Player : MonoBehaviour
                     }
                     break;
             }
-        }
-        Destroy(collision.gameObject);
+            Destroy(collision.gameObject);
+        }        
     }
 
     void OffBoomEffect()
@@ -256,19 +254,7 @@ public class Player : MonoBehaviour
         transform.position = Vector3.down * 4.2f;
         gameObject.SetActive(true);
         isHit = false;
-        Invoke("dontHit", 0f);
-    }
-
-    void dontHit()
-    {
-        polygon.isTrigger = true;
-        Invoke("againHit", 5f);
-    }
-
-    void againHit()
-    {
-        polygon.isTrigger = false;
-    }
+    }   
 
     private void OnTriggerExit2D(Collider2D collision)
     {

@@ -35,14 +35,20 @@ public class Player : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
     PolygonCollider2D poly;
+    Rigidbody2D rBody;
 
     public bool isRespawnTime;
+
+    float axisH;
+    float axisV;
+    bool isMoving = false;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         poly = GetComponent<PolygonCollider2D>();
+        rBody = GetComponent<Rigidbody2D>();
 
         gameState = "Playing";
 
@@ -75,6 +81,18 @@ public class Player : MonoBehaviour
             }
             return;
         }
+        rBody.velocity = new Vector2(axisH, axisV) * speed;       
+
+    }
+    public void SetAxis(float axisX, float axisY)
+    {
+        axisH = axisX;
+        axisV = axisY;
+
+        if (axisH == 0 && axisV == 0)
+            isMoving = false;
+        else
+            isMoving = true;
     }
 
     void Move()
@@ -117,7 +135,7 @@ public class Player : MonoBehaviour
         curBulletDelay += Time.deltaTime;
     }
 
-    void Power()
+    public void Power()
     {
         switch (power)
         {
